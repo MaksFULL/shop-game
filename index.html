@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALTERNATIVE VAPE SHOP - Гра на знижку</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-glow"></div>
+    <h1>ALTERNATIVE VAPE SHOP</h1>
+    <div class="cups" id="cupsContainer"></div>
+    <div class="result" id="result"></div>
+    <button onclick="startGame()">Спробувати ще раз</button>
+
+    <script>
+        const images = [
+            './img/InBottleStrawberry.jpg',
+            './img/InBottleStrawberry.jpg',
+            './img/InBottleStrawberry.jpg'
+        ];
+
+        function getRandomPrizes() {
+            const allPrizes = [
+                '10% знижка!',
+                '0% знижка',
+                'Пощастить наступного разу!',
+                '5% знижка',
+                'Знижка 15% на картриджі',
+                'Безкоштовна спроба!',
+                'Знижка 20% на наступну систему'
+            ];
+            let selected = [];
+            while (selected.length < 3) {
+                let prize = allPrizes[Math.floor(Math.random() * allPrizes.length)];
+                if (!selected.includes(prize)) {
+                    selected.push(prize);
+                }
+            }
+            return selected;
+        }
+
+        function startGame() {
+            const container = document.getElementById('cupsContainer');
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = '';
+            container.innerHTML = '';
+
+            const prizes = getRandomPrizes();
+
+            images.forEach((img, index) => {
+                const cup = document.createElement('div');
+                cup.className = 'cup';
+                cup.innerHTML = `<img src="${img}" alt="Варіант ${index + 1}">`;
+
+                cup.onclick = () => {
+                    document.querySelectorAll('.cup').forEach(c => {
+                        if (c !== cup) c.remove();
+                        else c.classList.add('selected');
+                    });
+                    resultDiv.textContent = prizes[index];
+
+                    document.body.classList.add('flash');
+                    setTimeout(() => {
+                        document.body.classList.remove('flash');
+                    }, 250);
+                };
+
+                container.appendChild(cup);
+            });
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
